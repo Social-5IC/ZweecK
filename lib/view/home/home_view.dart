@@ -11,7 +11,7 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => HomeViewState();
 }
 
-class HomeViewState extends State<HomeView> {
+class HomeViewState extends State<HomeView> with TickerProviderStateMixin{
 
   late TabController _tabController;
 
