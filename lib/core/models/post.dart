@@ -1,5 +1,5 @@
 class Post {
-  final String description;
+  final String key;
 
   String date;
 
@@ -7,18 +7,21 @@ class Post {
 
   int views;
 
-  int likes;
+  final String description;
 
-  final int? clicks;
+  String? link;
 
   final List<String> tags;
 
+  int likes;
+
   Post({
-    required this.description,
+    required this.key,
     String? date,
     required this.image,
     this.views = 0,
-    this.clicks,
+    required this.description,
+    this.link,
     required this.tags,
     this.likes = 0,
   }) : date = date ?? DateTime.now().toString();
