@@ -7,7 +7,7 @@ class User {
 
   final String mail;
 
-  final String dateOfBirth;
+  final String birth;
 
   final String sex;
 
@@ -19,10 +19,20 @@ class User {
     required this.name,
     required this.surname,
     required this.mail,
-    required this.dateOfBirth,
+    required this.birth,
     required this.sex,
     required this.language,
     this.isAdvertiser = false,
     required this.username,
   });
+
+  User.fromJson(Map<String, dynamic> json)
+      : username = json['username'],
+        name = json['name'],
+        surname = json['surname'],
+        mail = json['mail'],
+        birth = json['birth'],
+        sex = json['sex'],
+        language = json['language'],
+        isAdvertiser = json['isAdvertiser'];
 }

@@ -25,4 +25,14 @@ class Post {
     required this.tags,
     this.likes = 0,
   }) : date = date ?? DateTime.now().toString();
+
+  Post.fromJson(Map<String, dynamic> json)
+      : key = json['key'],
+        date = json['date'] ?? DateTime.now().toString(),
+        image = json['image'],
+        views = json['views'] ?? 0,
+        description = json['description'],
+        link = json['link'],
+        tags = json['tags'],
+        likes = json['likes'] ?? 0;
 }

@@ -1,22 +1,73 @@
+import 'dart:convert';
+
+import 'package:dartz/dartz.dart';
+import 'package:http/http.dart' as http;
 import 'package:zweeck/core/models/post.dart';
 import 'package:zweeck/core/models/user.dart';
 import 'package:zweeck/core/services/api/api_service.dart';
+import 'package:zweeck/core/services/api/state_classes/failure.dart';
+import 'package:zweeck/core/services/api/state_classes/success.dart';
 
 class ApiServiceHttp extends ApiService {
+  final authAPI = Uri.parse("http://localhost/api/auth");
+  final userAPI = Uri.parse("http://localhost/api/user");
+  final postAPI = Uri.parse("http://localhost/api/post");
+  final likeAPI = Uri.parse("http://localhost/api/like");
+
   @override
-  Future<Post> createPost(
-    String token,
-    String image,
-    String description,
-    List<String> tags,
-    String? link,
-  ) {
-    // TODO: implement createPost
-    throw UnimplementedError();
+  Future<Either<String, Failure>> login(
+    String mail,
+    String password,
+  ) async {
+    Map<String, String> headers = {
+      "mail": mail,
+      "password": password,
+    };
+
+    final response = await http.post(
+      authAPI,
+      headers: headers,
+    );
+
+    Map<String, dynamic> body = jsonDecode(response.body);
+
+    return response.statusCode == 200
+        ? Left(
+            body['token'],
+          )
+        : Right(
+            Failure.fromJson(body),
+          );
   }
 
   @override
-  Future<String> createUser(
+  Future<Either<Success, Failure>> logout(
+    String token,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+    };
+
+    final response = await http.delete(
+      authAPI,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      return Left(
+        Success(),
+      );
+    } else {
+      Map<String, dynamic> body = jsonDecode(response.body);
+
+      return Right(
+        Failure.fromJson(body),
+      );
+    }
+  }
+
+  @override
+  Future<Either<String, Failure>> createUser(
     String username,
     String password,
     String mail,
@@ -26,56 +77,236 @@ class ApiServiceHttp extends ApiService {
     String language,
     String birth,
     bool advertiser,
-  ) {
-    // TODO: implement createUser
-    throw UnimplementedError();
+  ) async {
+    Map<String, String> headers = {
+      "username": username,
+      "password": password,
+      "mail": mail,
+      "name": name,
+      "surname": surname,
+      "sex": sex,
+      "language": language,
+      "birth": birth,
+      "advertiser": advertiser.toString(),
+    };
+
+    final response = await http.post(
+      userAPI,
+      headers: headers,
+    );
+
+    Map<String, dynamic> body = jsonDecode(response.body);
+
+    return response.statusCode == 200
+        ? Left(
+            body['token'],
+          )
+        : Right(
+            Failure.fromJson(body),
+          );
   }
 
   @override
-  Future<void> deletePost(String token, String post) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<Either<User, Failure>> getUser(
+    String token,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+    };
+
+    final response = await http.get(
+      userAPI,
+      headers: headers,
+    );
+
+    Map<String, dynamic> body = jsonDecode(response.body);
+
+    return response.statusCode == 200
+        ? Left(
+            User.fromJson(body),
+          )
+        : Right(
+            Failure.fromJson(body),
+          );
   }
 
   @override
-  Future<void> deleteUser(String token) {
-    // TODO: implement deleteUser
-    throw UnimplementedError();
+  Future<Either<Success, Failure>> deleteUser(
+    String token,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+    };
+
+    final response = await http.delete(
+      userAPI,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      return Left(
+        Success(),
+      );
+    } else {
+      Map<String, dynamic> body = jsonDecode(response.body);
+
+      return Right(
+        Failure.fromJson(body),
+      );
+    }
   }
 
   @override
-  Future<void> dropLike(String token, String post) {
-    // TODO: implement dropLike
-    throw UnimplementedError();
+  Future<Either<Post, Failure>> createPost(
+    String token,
+    String image,
+    String description,
+    List<String> tags,
+    String? link,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+      "image": image,
+      "description": description,
+      "tags": "[" + tags.join(",") + "]",
+      "link": link ?? '',
+    };
+
+    headers.removeWhere((key, value) => value.isEmpty);
+
+    final response = await http.post(
+      postAPI,
+      headers: headers,
+    );
+
+    Map<String, dynamic> body = jsonDecode(response.body);
+
+    return response.statusCode == 200
+        ? Left(
+            Post(
+              key: body['key'],
+              image: image,
+              description: description,
+              tags: tags,
+              link: link,
+            ),
+          )
+        : Right(
+            Failure.fromJson(body),
+          );
   }
 
   @override
-  Future<List<Post>> getPosts(String token, String filter) {
-    // TODO: implement getPosts
-    throw UnimplementedError();
+  Future<Either<List<Post>, Failure>> getPosts(
+    String token,
+    String filter,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+      "filter": filter,
+    };
+
+    final response = await http.get(
+      postAPI,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      List<Map<String, dynamic>> posts = jsonDecode(response.body);
+
+      return Left(
+        posts.map((post) => Post.fromJson(post)).toList(),
+      );
+    } else {
+      Map<String, dynamic> body = jsonDecode(response.body);
+
+      return Right(
+        Failure.fromJson(body),
+      );
+    }
   }
 
   @override
-  Future<User> getUser(String token) {
-    // TODO: implement getUser
-    throw UnimplementedError();
+  Future<Either<Success, Failure>> deletePost(
+    String token,
+    String post,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+      "post": post,
+    };
+
+    final response = await http.delete(
+      postAPI,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      return Left(
+        Success(),
+      );
+    } else {
+      Map<String, dynamic> body = jsonDecode(response.body);
+
+      return Right(
+        Failure.fromJson(body),
+      );
+    }
   }
 
   @override
-  Future<void> like(String token, String post) {
-    // TODO: implement like
-    throw UnimplementedError();
+  Future<Either<Success, Failure>> like(
+    String token,
+    String post,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+      "post": post,
+    };
+
+    final response = await http.post(
+      likeAPI,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      return Left(
+        Success(),
+      );
+    } else {
+      Map<String, dynamic> body = jsonDecode(response.body);
+
+      return Right(
+        Failure.fromJson(body),
+      );
+    }
   }
 
   @override
-  Future<String> login(String mail, String password) {
-    // TODO: implement login
-    throw UnimplementedError();
-  }
+  Future<Either<Success, Failure>> dropLike(
+    String token,
+    String post,
+  ) async {
+    Map<String, String> headers = {
+      "token": token,
+      "post": post,
+    };
 
-  @override
-  Future<void> logout(String token) {
-    // TODO: implement logout
-    throw UnimplementedError();
+    final response = await http.delete(
+      likeAPI,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      return Left(
+        Success(),
+      );
+    } else {
+      Map<String, dynamic> body = jsonDecode(response.body);
+
+      return Right(
+        Failure.fromJson(body),
+      );
+    }
   }
 }

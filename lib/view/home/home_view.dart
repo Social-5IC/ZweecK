@@ -16,6 +16,12 @@ class HomeView extends StatelessWidget {
 
   Widget _uiBuilder(BuildContext context, HomeViewModel model, Widget? child) {
     // create TabBar
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: model.errorFlag
+            ? Text("${model.error!.error}")
+            : const CircularProgressIndicator(),
+      ),
+    );
   }
 }
