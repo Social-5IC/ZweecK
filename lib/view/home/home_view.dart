@@ -9,7 +9,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (HomeViewModel model) => model.init(),
+      onModelReady: (HomeViewModel model) => model.init(context),
       builder: _uiBuilder,
     );
   }
@@ -18,10 +18,27 @@ class HomeView extends StatelessWidget {
     // create TabBar
     return Scaffold(
       body: Center(
-        child: model.errorFlag
-            ? Text("${model.error!.error}")
-            : const CircularProgressIndicator(),
+        child: model.completionFlag
+            ? _loadHome(context, model)
+            : _splashScreen(context, model),
       ),
     );
+  }
+
+  Widget _splashScreen(BuildContext context, HomeViewModel model) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Image.asset("assets/images/flutter_logo.jpg"),
+      ),
+    );
+  }
+
+  Widget _loadHome(BuildContext context, HomeViewModel model) {
+    if (model.error != null) {
+      return Text("${model.error!.code}");
+    } else {
+      return const Text("Home works");
+    }
   }
 }

@@ -1,10 +1,10 @@
 class Failure {
   final String timestamp;
-  final int error;
+  final int code;
   final String message;
 
   Failure.fromJson(Map<String, dynamic> json)
       : timestamp = json["timestamp"],
-        error = json["error"],
+        code = json["error"],
         message = json["message"];
 }

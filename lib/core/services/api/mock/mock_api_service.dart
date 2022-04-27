@@ -19,6 +19,13 @@ class ApiServiceMock extends ApiService {
   @override
   Future<Either<List<Post>, Failure>> getPosts(
       String token, String filter) async {
+    // return Right(
+    //   Failure.fromJson({
+    //     "timestamp": "1980-01-01 12:00:00",
+    //     "error": 1,
+    //     "message": "error",
+    //   }),
+    // );
     return Left(
       [
         Post(
@@ -26,7 +33,13 @@ class ApiServiceMock extends ApiService {
           image: 'image',
           tags: ['tag'],
           key: '123e4567-e89b-12d3-a456-426614174000',
-        )
+        ),
+        Post(
+          description: 'dummy',
+          image: 'image',
+          tags: ['tag'],
+          key: '123e4567-e89b-12d3-a456-426614174000',
+        ),
       ],
     );
   }

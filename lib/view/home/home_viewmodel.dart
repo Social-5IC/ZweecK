@@ -1,15 +1,16 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:zweeck/core/models/post.dart';
 import 'package:zweeck/core/services/api/api_service.dart';
 import 'package:zweeck/core/services/api/state_classes/failure.dart';
 import 'package:zweeck/core/services/service_locator.dart';
 import 'package:zweeck/core/services/storage/storage_service.dart';
+import 'package:zweeck/view/welcome/welcome_view.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final ApiService _apiService = getIt<ApiService>();
   final StorageService _storageService = getIt<StorageService>();
 
-  bool errorFlag = false;
+  bool completionFlag = false;
 
   Failure? error;
 
@@ -23,10 +24,16 @@ class HomeViewModel extends ChangeNotifier {
 
   List<Post> get suggestedPosts => _suggestedPosts;
 
-  Future init() async {
+  Future init(BuildContext context) async {
     _token = await _storageService.getToken();
     if (_token.isEmpty) {
-      // Navigator push to sign up page
+      // go to welcome page
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const WelcomeView(),
+        ),
+      );
     } else {
       // GET following posts
       (await _apiService.getPosts(_token, "F")).fold(
@@ -35,7 +42,6 @@ class HomeViewModel extends ChangeNotifier {
         },
         (failure) {
           error = failure;
-          errorFlag = true;
         },
       );
       // GET suggested posts
@@ -45,9 +51,9 @@ class HomeViewModel extends ChangeNotifier {
         },
         (failure) {
           error = failure;
-          errorFlag = true;
         },
       );
+      completionFlag = true;
       notifyListeners();
     }
   }

@@ -1,3 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-class WelcomeViewModel extends ChangeNotifier {}
+class WelcomeViewModel extends ChangeNotifier {
+  init() {
+    notifyListeners();
+  }
+}
