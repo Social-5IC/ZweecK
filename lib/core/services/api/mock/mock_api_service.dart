@@ -74,6 +74,13 @@ class ApiServiceMock extends ApiService {
     String birth,
     bool advertiser,
   ) async {
+    // return Right(
+    //   Failure.fromJson({
+    //     "timestamp": "1980-01-01 12:00:00",
+    //     "error": 1,
+    //     "message": "error",
+    //   }),
+    // );
     return const Left("123e4567-e89b-12d3-a456-426614174000");
   }
 

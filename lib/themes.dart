@@ -22,11 +22,11 @@ final lightTheme = ThemeData.light().copyWith(
 final systemDarkTheme = SystemUiOverlayStyle.dark.copyWith(
   systemNavigationBarColor: Colors.transparent,
   statusBarIconBrightness: Brightness.light,
-  statusBarColor: darkTheme.scaffoldBackgroundColor.withOpacity(.8),
+  statusBarColor: Colors.transparent,
 );
 
 final systemLightTheme = SystemUiOverlayStyle.light.copyWith(
   systemNavigationBarColor: Colors.transparent,
   statusBarIconBrightness: Brightness.dark,
-  statusBarColor: lightTheme.scaffoldBackgroundColor.withOpacity(.8),
+  statusBarColor: Colors.transparent,
 );

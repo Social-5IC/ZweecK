@@ -25,6 +25,7 @@ class HomeViewModel extends ChangeNotifier {
   List<Post> get suggestedPosts => _suggestedPosts;
 
   Future init(BuildContext context) async {
+    // await _storageService.saveToken("");
     _token = await _storageService.getToken();
     if (_token.isEmpty) {
       // go to welcome page
@@ -33,7 +34,7 @@ class HomeViewModel extends ChangeNotifier {
         MaterialPageRoute(
           builder: (context) => const WelcomeView(),
         ),
-      );
+      ).then((_) => init(context));
     } else {
       // GET following posts
       (await _apiService.getPosts(_token, "F")).fold(
