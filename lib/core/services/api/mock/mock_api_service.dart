@@ -7,6 +7,19 @@ import 'package:zweeck/core/services/api/state_classes/success.dart';
 
 class ApiServiceMock extends ApiService {
   @override
+  Future<Either<Success, Failure>> test() async {
+    // return Right(
+    //   Failure.fromJson({
+    //     "statusCode": 404,
+    //     "timestamp": "1980-01-01 12:00:00",
+    //     "error": 1,
+    //     "message": "error",
+    //   }),
+    // );
+    return Left(Success());
+  }
+
+  @override
   Future<Either<String, Failure>> login(String mail, String password) async {
     return const Left("123e4567-e89b-12d3-a456-426614174000");
   }
@@ -21,6 +34,7 @@ class ApiServiceMock extends ApiService {
       String token, String filter) async {
     // return Right(
     //   Failure.fromJson({
+    //     "statusCode": 400,
     //     "timestamp": "1980-01-01 12:00:00",
     //     "error": 1,
     //     "message": "error",
@@ -76,6 +90,7 @@ class ApiServiceMock extends ApiService {
   ) async {
     // return Right(
     //   Failure.fromJson({
+    //     "statusCode": 400,
     //     "timestamp": "1980-01-01 12:00:00",
     //     "error": 1,
     //     "message": "error",

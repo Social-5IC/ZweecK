@@ -8,11 +8,25 @@ import 'package:zweeck/core/services/api/api_service.dart';
 import 'package:zweeck/core/services/api/state_classes/failure.dart';
 import 'package:zweeck/core/services/api/state_classes/success.dart';
 
+const String _baseUrl = "http://localhost/api";
+
 class ApiServiceHttp extends ApiService {
-  final authAPI = Uri.parse("http://localhost/api/auth");
-  final userAPI = Uri.parse("http://localhost/api/user");
-  final postAPI = Uri.parse("http://localhost/api/post");
-  final likeAPI = Uri.parse("http://localhost/api/like");
+  final authAPI = Uri.parse("$_baseUrl/auth");
+  final userAPI = Uri.parse("$_baseUrl/user");
+  final postAPI = Uri.parse("$_baseUrl/post");
+  final likeAPI = Uri.parse("$_baseUrl/like");
+
+  @override
+  Future<Either<Success, Failure>> test() async {
+    final response = await http.get(Uri.parse(_baseUrl));
+    return response.statusCode == 200
+        ? Left(
+            Success(),
+          )
+        : Right(
+            Failure.fromJson({"statusCode": response.statusCode}),
+          );
+  }
 
   @override
   Future<Either<String, Failure>> login(
@@ -36,7 +50,12 @@ class ApiServiceHttp extends ApiService {
             body['token'],
           )
         : Right(
-            Failure.fromJson(body),
+            Failure.fromJson(
+              {
+                "statusCode": response.statusCode,
+                ...body,
+              },
+            ),
           );
   }
 
@@ -61,7 +80,12 @@ class ApiServiceHttp extends ApiService {
       Map<String, dynamic> body = jsonDecode(response.body);
 
       return Right(
-        Failure.fromJson(body),
+        Failure.fromJson(
+          {
+            "statusCode": response.statusCode,
+            ...body,
+          },
+        ),
       );
     }
   }
@@ -102,7 +126,12 @@ class ApiServiceHttp extends ApiService {
             body['token'],
           )
         : Right(
-            Failure.fromJson(body),
+            Failure.fromJson(
+              {
+                "statusCode": response.statusCode,
+                ...body,
+              },
+            ),
           );
   }
 
@@ -126,7 +155,12 @@ class ApiServiceHttp extends ApiService {
             User.fromJson(body),
           )
         : Right(
-            Failure.fromJson(body),
+            Failure.fromJson(
+              {
+                "statusCode": response.statusCode,
+                ...body,
+              },
+            ),
           );
   }
 
@@ -151,7 +185,12 @@ class ApiServiceHttp extends ApiService {
       Map<String, dynamic> body = jsonDecode(response.body);
 
       return Right(
-        Failure.fromJson(body),
+        Failure.fromJson(
+          {
+            "statusCode": response.statusCode,
+            ...body,
+          },
+        ),
       );
     }
   }
@@ -192,7 +231,12 @@ class ApiServiceHttp extends ApiService {
             ),
           )
         : Right(
-            Failure.fromJson(body),
+            Failure.fromJson(
+              {
+                "statusCode": response.statusCode,
+                ...body,
+              },
+            ),
           );
   }
 
@@ -221,7 +265,12 @@ class ApiServiceHttp extends ApiService {
       Map<String, dynamic> body = jsonDecode(response.body);
 
       return Right(
-        Failure.fromJson(body),
+        Failure.fromJson(
+          {
+            "statusCode": response.statusCode,
+            ...body,
+          },
+        ),
       );
     }
   }
@@ -249,7 +298,12 @@ class ApiServiceHttp extends ApiService {
       Map<String, dynamic> body = jsonDecode(response.body);
 
       return Right(
-        Failure.fromJson(body),
+        Failure.fromJson(
+          {
+            "statusCode": response.statusCode,
+            ...body,
+          },
+        ),
       );
     }
   }
@@ -277,7 +331,12 @@ class ApiServiceHttp extends ApiService {
       Map<String, dynamic> body = jsonDecode(response.body);
 
       return Right(
-        Failure.fromJson(body),
+        Failure.fromJson(
+          {
+            "statusCode": response.statusCode,
+            ...body,
+          },
+        ),
       );
     }
   }
@@ -305,7 +364,12 @@ class ApiServiceHttp extends ApiService {
       Map<String, dynamic> body = jsonDecode(response.body);
 
       return Right(
-        Failure.fromJson(body),
+        Failure.fromJson(
+          {
+            "statusCode": response.statusCode,
+            ...body,
+          },
+        ),
       );
     }
   }

@@ -5,6 +5,9 @@ import 'package:zweeck/core/services/api/state_classes/failure.dart';
 import 'package:zweeck/core/services/api/state_classes/success.dart';
 
 abstract class ApiService {
+  // test the server connection
+  Future<Either<Success, Failure>> test();
+
   // login to the MZ, use the mail, password combination, return the token
   Future<Either<String, Failure>> login(String mail, String password);
 
@@ -13,17 +16,15 @@ abstract class ApiService {
 
   // create a user and automatically logged it,
   // take its attributes, return the token
-  Future<Either<String, Failure>> createUser(
-    String username,
-    String password,
-    String mail,
-    String name,
-    String surname,
-    String sex,
-    String language,
-    String birth,
-    bool advertiser,
-  );
+  Future<Either<String, Failure>> createUser(String username,
+      String password,
+      String mail,
+      String name,
+      String surname,
+      String sex,
+      String language,
+      String birth,
+      bool advertiser,);
 
   // get the user of this session, take the token, return a user
   Future<Either<User, Failure>> getUser(String token);
@@ -32,13 +33,11 @@ abstract class ApiService {
   Future<Either<Success, Failure>> deleteUser(String token);
 
   // create a post, take its attribute, return the Post with the new key
-  Future<Either<Post, Failure>> createPost(
-    String token,
-    String image,
-    String description,
-    List<String> tags,
-    String? link,
-  );
+  Future<Either<Post, Failure>> createPost(String token,
+      String image,
+      String description,
+      List<String> tags,
+      String? link,);
 
   // get different posts, based on the filter,
   // take the token and the filter, return the posts

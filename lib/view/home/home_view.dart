@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:zweeck/view/home/home_viewmodel.dart';
+import 'package:zweeck/view/post/post_view.dart';
+import 'package:zweeck/view/user/user_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -15,17 +17,14 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _uiBuilder(BuildContext context, HomeViewModel model, Widget? child) {
-    // create TabBar
-    return Scaffold(
-      body: Center(
-        child: model.completionFlag
-            ? _loadHome(context, model)
-            : _splashScreen(context, model),
-      ),
-    );
+    return model.readyFlag
+        ? model.error != null
+            ? _buildErrorDialog(context, model)
+            : _buildHome(context, model)
+        : _buildSplashScreen(context, model);
   }
 
-  Widget _splashScreen(BuildContext context, HomeViewModel model) {
+  Widget _buildSplashScreen(BuildContext context, HomeViewModel model) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
@@ -34,11 +33,57 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _loadHome(BuildContext context, HomeViewModel model) {
-    if (model.error != null) {
-      return Text("${model.error!.code}");
-    } else {
-      return const Text("Home works");
-    }
+  Widget _buildErrorDialog(BuildContext context, HomeViewModel model) {
+    return Scaffold(
+      body: Center(
+        child: Text("Error: ${model.error!.statusCode}"),
+      ),
+    );
+  }
+
+  Widget _buildHome(BuildContext context, HomeViewModel model) {
+    return DefaultTabController(
+      length: 3,
+      child: Builder(
+        builder: (context) => Scaffold(
+          bottomNavigationBar: BottomAppBar(
+            child: TabBar(
+              indicatorColor: Theme.of(context).primaryColor,
+              tabs: [
+                Tab(
+                  child: Icon(
+                    Icons.home,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Tab(
+                  child: Icon(
+                    Icons.auto_awesome,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Tab(
+                  child: Icon(
+                    Icons.person,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          body: const TabBarView(
+            children: [
+              PostView(
+                filter: "F",
+              ),
+              PostView(
+                filter: "S",
+              ),
+              UserView(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
