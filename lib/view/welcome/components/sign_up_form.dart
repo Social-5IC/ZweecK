@@ -182,7 +182,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           ElevatedButton(
             onPressed: submit,
-            child: const Text("Submit"),
+            child: const Text("Sign up"),
           )
         ],
       ),
@@ -192,6 +192,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   void dispose() {
     _usernameController.dispose();
+    _passwordController.dispose();
     _nameController.dispose();
     _surnameController.dispose();
     _mailController.dispose();

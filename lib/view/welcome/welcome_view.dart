@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:zweeck/view/welcome/components/login_form.dart';
 import 'package:zweeck/view/welcome/components/sign_up_form.dart';
 import 'package:zweeck/view/welcome/welcome_viewmodel.dart';
 
@@ -20,22 +21,63 @@ class WelcomeView extends StatelessWidget {
     Widget? child,
   ) {
     // create TabBar
-    return Scaffold(
-      body: Column(
+    return DefaultTabController(
+      length: 2,
+      child: Builder(
+        builder: (BuildContext context) => Scaffold(
+          body: TabBarView(
+            children: [
+              _buildSignUpTab(context, model),
+              _buildLoginTab(context, model),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignUpTab(
+    BuildContext context,
+    WelcomeViewModel model,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+      ),
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
+      child: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
+          RepaintBoundary(
+            child: SignUpForm(
+              onSubmit: model.signUp,
             ),
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(5),
-            child: RepaintBoundary(
-              child: SignUpForm(
-                onSubmit: model.signUp,
-              ),
-            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              DefaultTabController.of(context)!.animateTo(1);
+            },
+            child: const Text("login instead"),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildLoginTab(
+    BuildContext context,
+    WelcomeViewModel model,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+      ),
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
+      child: RepaintBoundary(
+        child: LoginForm(
+          onSubmit: model.login,
+        ),
       ),
     );
   }

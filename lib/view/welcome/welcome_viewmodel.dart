@@ -11,16 +11,18 @@ class WelcomeViewModel extends ChangeNotifier {
   Failure? error;
   String _token = "";
 
-  Future<Failure?> signUp(BuildContext context,
-      String username,
-      String password,
-      String mail,
-      String name,
-      String surname,
-      String sex,
-      String language,
-      String birth,
-      bool advertiser,) async {
+  Future<Failure?> signUp(
+    BuildContext context,
+    String username,
+    String password,
+    String mail,
+    String name,
+    String surname,
+    String sex,
+    String language,
+    String birth,
+    bool advertiser,
+  ) async {
     (await _apiService.createUser(
       username,
       password,
@@ -33,10 +35,41 @@ class WelcomeViewModel extends ChangeNotifier {
       advertiser,
     ))
         .fold(
-          (token) {
+      (token) {
         _token = token;
       },
-          (failure) {
+      (failure) {
+        error = failure;
+      },
+    );
+
+    // error case
+    if (error != null) {
+      notifyListeners();
+      return error!;
+    }
+
+    // safe zone
+    await _storageService.saveToken(_token);
+    Navigator.pop(context);
+    notifyListeners();
+    return null;
+  }
+
+  Future<Failure?> login(
+    BuildContext context,
+    String mail,
+    String password,
+  ) async {
+    (await _apiService.login(
+      mail,
+      password,
+    ))
+        .fold(
+      (token) {
+        _token = token;
+      },
+      (failure) {
         error = failure;
       },
     );
