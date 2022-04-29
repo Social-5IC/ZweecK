@@ -71,16 +71,20 @@ class HomeView extends StatelessWidget {
               ],
             ),
           ),
-          body: const TabBarView(
-            children: [
-              PostView(
-                filter: "F",
-              ),
-              PostView(
-                filter: "S",
-              ),
-              UserView(),
-            ],
+          body: Padding(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+            child: const TabBarView(
+              children: [
+                PostView(
+                  filter: "F",
+                ),
+                PostView(
+                  filter: "S",
+                ),
+                UserView(),
+              ],
+            ),
           ),
         ),
       ),

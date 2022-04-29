@@ -35,10 +35,12 @@ class PostViewModel extends ChangeNotifier {
     (await _apiService.getPosts(_token, _filter)).fold(
       (posts) {
         _posts.addAll(posts);
+        print(_posts.length);
       },
       (failure) {
         error = failure;
       },
     );
+    notifyListeners();
   }
 }
