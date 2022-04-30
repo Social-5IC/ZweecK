@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:zweeck/core/models/post.dart';
 import 'package:zweeck/core/services/api/api_service.dart';
 import 'package:zweeck/core/services/api/state_classes/failure.dart';
@@ -23,11 +21,37 @@ class PostViewModel extends ChangeNotifier {
 
   List<Post> get posts => _posts;
 
-  ImageProvider transparentPlaceholder = MemoryImage(kTransparentImage);
+  late bool _personalZone;
+
+  bool get personalZone => _personalZone;
+
+  String _title = "";
+
+  String get title => _title;
+
+  String _emptyListPlaceHolder = "";
+
+  String get emptyListPlaceHolder => _emptyListPlaceHolder;
 
   init(String filter) async {
     _token = await _storageService.getToken();
     _filter = filter;
+    _personalZone = _filter == "Y";
+
+    switch (filter) {
+      case "F":
+        _title = "Your following posts";
+        _emptyListPlaceHolder = "Follow someone!";
+        break;
+      case "S":
+        _title = "Suggested for you";
+        _emptyListPlaceHolder = "Nothing for you yet!";
+        break;
+      case "Y":
+        _title = "Your posts";
+        _emptyListPlaceHolder = "No post";
+        break;
+    }
 
     retrievePosts();
 
@@ -75,5 +99,37 @@ class PostViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-// TODO addPost, deletePost if _filter == "Y"
+  Future<Failure?> createPost(
+    String image,
+    String description,
+    List<String> tags,
+    String? link,
+  ) async {
+    (await _apiService.createPost(_token, image, description, tags, link)).fold(
+      (post) {
+        _posts.add(post);
+      },
+      (failure) {
+        error = failure;
+      },
+    );
+
+    notifyListeners();
+    return error;
+  }
+
+  Future deletePost(
+    String key,
+  ) async {
+    (await _apiService.deletePost(_token, key)).fold(
+      (post) {
+        _posts.removeWhere((element) => element.key == key);
+      },
+      (failure) {
+        error = failure;
+      },
+    );
+
+    notifyListeners();
+  }
 }

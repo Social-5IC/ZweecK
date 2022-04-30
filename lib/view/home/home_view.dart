@@ -46,6 +46,7 @@ class HomeView extends StatelessWidget {
       length: 3,
       child: Builder(
         builder: (context) => Scaffold(
+          resizeToAvoidBottomInset: false,
           bottomNavigationBar: BottomAppBar(
             child: TabBar(
               indicatorColor: Theme.of(context).primaryColor,
