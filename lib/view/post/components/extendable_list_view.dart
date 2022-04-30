@@ -53,6 +53,7 @@ class _ExtendableListViewState extends State<ExtendableListView> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       controller: controller,
       itemCount: widget.itemCount,
       itemBuilder: widget.itemBuilder,

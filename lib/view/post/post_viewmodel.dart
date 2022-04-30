@@ -31,11 +31,38 @@ class PostViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  retrievePosts() async {
+  Future retrievePosts() async {
     (await _apiService.getPosts(_token, _filter)).fold(
       (posts) {
         _posts.addAll(posts);
-        print(_posts.length);
+      },
+      (failure) {
+        error = failure;
+      },
+    );
+    notifyListeners();
+  }
+
+  Future likePost(String key) async {
+    (await _apiService.like(_token, key)).fold(
+      (success) {
+        _posts.firstWhere((element) => element.key == key)
+          ..youLiked = true
+          ..likes += 1;
+      },
+      (failure) {
+        error = failure;
+      },
+    );
+    notifyListeners();
+  }
+
+  Future dropLike(String key) async {
+    (await _apiService.dropLike(_token, key)).fold(
+      (success) {
+        _posts.firstWhere((element) => element.key == key)
+          ..youLiked = false
+          ..likes -= 1;
       },
       (failure) {
         error = failure;

@@ -18,9 +18,9 @@ class HomeView extends StatelessWidget {
 
   Widget _uiBuilder(BuildContext context, HomeViewModel model, Widget? child) {
     return model.readyFlag
-        ? model.error != null
-            ? _buildErrorDialog(context, model)
-            : _buildHome(context, model)
+        ? model.error == null
+            ? _buildView(context, model)
+            : _buildErrorDialog(context, model)
         : _buildSplashScreen(context, model);
   }
 
@@ -41,7 +41,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildHome(BuildContext context, HomeViewModel model) {
+  Widget _buildView(BuildContext context, HomeViewModel model) {
     return DefaultTabController(
       length: 3,
       child: Builder(

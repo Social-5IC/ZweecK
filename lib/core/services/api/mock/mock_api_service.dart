@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dartz/dartz.dart';
+import 'package:flutter/services.dart';
 import 'package:zweeck/core/models/post.dart';
 import 'package:zweeck/core/models/user.dart';
 import 'package:zweeck/core/services/api/api_service.dart';
@@ -32,6 +36,9 @@ class ApiServiceMock extends ApiService {
   @override
   Future<Either<List<Post>, Failure>> getPosts(
       String token, String filter) async {
+    ByteData bytes = await rootBundle.load('assets/images/flutter_logo.jpg');
+    String image = base64.encode(Uint8List.view(bytes.buffer));
+
     // return Right(
     //   Failure.fromJson({
     //     "statusCode": 400,
@@ -40,35 +47,66 @@ class ApiServiceMock extends ApiService {
     //     "message": "error",
     //   }),
     // );
+    // return const Left([]);
     return Left(
       [
         Post(
           description: 'dummy1',
-          image: 'image',
+          image: image,
           tags: ['tag'],
-          key: '123e4567-e89b-12d3-a456-426614174000',
+          key: '123e4567-e89b-12d4-a456-426614174000',
         ),
         Post(
           description: 'dummy2',
-          image: 'image',
+          image: image,
           tags: ['tag'],
-          key: '123e4567-e89b-12d3-a456-426614174000',
+          key: '123e4567-e89b-12d5-a456-426614174000',
         ),
         Post(
           description: 'dummy3',
-          image: 'image',
+          image: image,
           tags: ['tag'],
-          key: '123e4567-e89b-12d3-a456-426614174000',
+          key: '123e4567-e89b-12d6-a456-426614174000',
         ),
         Post(
           description: 'dummy4',
-          image: 'image',
+          image: image,
           tags: ['tag'],
-          key: '123e4567-e89b-12d3-a456-426614174000',
+          key: '123e4567-e89b-12d7-a456-426614174000',
         ),
         Post(
           description: 'dummy5',
-          image: 'image',
+          image: image,
+          tags: ['tag'],
+          key: '123e4567-e89b-12d8-a456-426614174000',
+        ),
+        Post(
+          description: 'dummy6',
+          image: image,
+          tags: ['tag'],
+          key: '123e4567-e89b-12d9-a456-426614174000',
+        ),
+        Post(
+          description: 'dummy7',
+          image: image,
+          tags: ['tag'],
+          key: '123e4567-e89b-12d0-a456-426614174000',
+        ),
+        Post(
+          description: 'dummy8',
+          image: image,
+          tags: ['tag'],
+          key: '123e4567-e89b-12d1-a456-426614174000',
+        ),
+        Post(
+          description: 'dummy9',
+          image: image,
+          tags: ['tag'],
+          key: '123e4567-e89b-12d2-a456-426614174000',
+        ),
+        Post(
+          description: 'dummy0',
+          image: image,
           tags: ['tag'],
           key: '123e4567-e89b-12d3-a456-426614174000',
         ),

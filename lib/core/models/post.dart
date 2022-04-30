@@ -15,16 +15,19 @@ class Post {
 
   int likes;
 
-  Post({
-    required this.key,
-    String? date,
-    required this.image,
-    this.views = 0,
-    required this.description,
-    this.link,
-    required this.tags,
-    this.likes = 0,
-  }) : date = date ?? DateTime.now().toString();
+  bool youLiked;
+
+  Post(
+      {required this.key,
+      String? date,
+      required this.image,
+      this.views = 0,
+      required this.description,
+      this.link,
+      required this.tags,
+      this.likes = 0,
+      this.youLiked = false})
+      : date = date ?? DateTime.now().toString();
 
   Post.fromJson(Map<String, dynamic> json)
       : key = json['key'],
@@ -34,5 +37,6 @@ class Post {
         description = json['description'],
         link = json['link'],
         tags = json['tags'],
-        likes = json['likes'] ?? 0;
+        likes = json['likes'] ?? 0,
+        youLiked = json['youLiked'] ?? false;
 }
