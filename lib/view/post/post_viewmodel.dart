@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:zweeck/core/models/post.dart';
 import 'package:zweeck/core/services/api/api_service.dart';
 import 'package:zweeck/core/services/api/state_classes/failure.dart';
@@ -20,6 +22,8 @@ class PostViewModel extends ChangeNotifier {
   final List<Post> _posts = [];
 
   List<Post> get posts => _posts;
+
+  ImageProvider transparentPlaceholder = MemoryImage(kTransparentImage);
 
   init(String filter) async {
     _token = await _storageService.getToken();
@@ -70,4 +74,6 @@ class PostViewModel extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+// TODO addPost, deletePost if _filter == "Y"
 }

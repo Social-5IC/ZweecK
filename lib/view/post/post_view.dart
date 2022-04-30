@@ -105,6 +105,14 @@ class PostView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(post.description),
+            // FadeInImage(
+            //   fadeInDuration: const Duration(milliseconds: 1),
+            //   fadeInCurve: Curves.easeInOutQuint,
+            //   placeholder: MemoryImage(kTransparentImage),
+            //   image: MemoryImage(
+            //     base64Decode(post.image),
+            //   ),
+            // ),
             Image.memory(base64Decode(post.image)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

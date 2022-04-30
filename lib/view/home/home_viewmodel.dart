@@ -26,7 +26,6 @@ class HomeViewModel extends ChangeNotifier {
     }
 
     // validate session
-    // await _storageService.saveToken("");
     _token = await _storageService.getToken();
 
     if (_token.isEmpty) {

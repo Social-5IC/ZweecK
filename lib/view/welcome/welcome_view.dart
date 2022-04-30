@@ -25,6 +25,7 @@ class WelcomeView extends StatelessWidget {
       length: 2,
       child: Builder(
         builder: (BuildContext context) => Scaffold(
+          resizeToAvoidBottomInset: false,
           body: TabBarView(
             children: [
               _buildSignUpTab(context, model),
