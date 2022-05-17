@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(
-      SchedulerBinding.instance!.window.platformBrightness == Brightness.dark
+      SchedulerBinding.instance.window.platformBrightness == Brightness.dark
           ? systemDarkTheme
           : systemLightTheme,
     );

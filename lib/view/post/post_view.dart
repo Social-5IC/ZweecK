@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:zweeck/core/models/post.dart';
 import 'package:zweeck/view/post/components/create_post_form.dart';
 import 'package:zweeck/view/post/components/extendable_list_view.dart';
@@ -98,59 +99,69 @@ class PostView extends StatelessWidget {
   }
 
   Widget _buildPost(BuildContext context, PostViewModel model, Post post) {
-    return LimitedBox(
-      maxHeight: 1000,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // FadeInImage(
-          //   fadeInDuration: const Duration(milliseconds: 1),
-          //   fadeInCurve: Curves.easeInOutQuint,
-          //   placeholder: MemoryImage(kTransparentImage),
-          //   image: MemoryImage(
-          //     base64Decode(post.image),
-          //   ),
-          // ),
-          Stack(children: [
-            Image.memory(base64Decode(post.image)),
-            if (model.personalZone)
-              Container(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  splashRadius: 20,
-                  color: Theme.of(context).primaryColor,
-                  onPressed: () {
-                    model.deletePost(post.key);
-                  },
-                  icon: const Icon(Icons.remove),
-                ),
-              )
-          ]),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(post.description),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return GestureDetector(
+      onDoubleTap: () {
+        post.youLiked ? model.dropLike(post.key) : model.likePost(post.key);
+      },
+      child: LimitedBox(
+        maxHeight: 1000,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
               children: [
-                Text("${post.likes} likes"),
-                ElevatedButton(
-                  onPressed: () {
-                    post.youLiked
-                        ? model.dropLike(post.key)
-                        : model.likePost(post.key);
-                  },
-                  child: Icon(
-                    post.youLiked ? Icons.favorite : Icons.favorite_border,
+                FadeInImage(
+                  fadeInDuration: const Duration(milliseconds: 200),
+                  fadeInCurve: Curves.easeInOutQuint,
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: MemoryImage(
+                    base64Decode(post.image),
                   ),
                 ),
+                // Image.memory(base64Decode(post.image)),
+                if (model.personalZone)
+                  Container(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      splashRadius: 20,
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        model.deletePost(post.key);
+                      },
+                      icon: const Icon(Icons.remove),
+                    ),
+                  )
               ],
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              child: Text(post.description),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${post.views} views"),
+                  Text("${post.likes} likes"),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor),
+                    onPressed: () {
+                      post.youLiked
+                          ? model.dropLike(post.key)
+                          : model.likePost(post.key);
+                    },
+                    child: Icon(
+                      post.youLiked ? Icons.favorite : Icons.favorite_border,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
