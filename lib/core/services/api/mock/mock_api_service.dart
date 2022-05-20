@@ -36,11 +36,10 @@ class ApiServiceMock extends ApiService {
   }
 
   @override
-  Future<Either<List<Post>, Failure>> getPosts(String token,
-      String filter) async {
+  Future<Either<List<Post>, Failure>> getPosts(
+      String token, String filter) async {
     final List<dynamic> jsonFile =
-    jsonDecode(await rootBundle.loadString("assets/posts.json"));
-    print(jsonFile);
+        jsonDecode(await rootBundle.loadString("assets/posts.json"));
     final List<Future<Post>> jsonElaboratedPosts = jsonFile.map((object) async {
       // generate uuid
       object["key"] = const Uuid().v4();
@@ -53,18 +52,17 @@ class ApiServiceMock extends ApiService {
       return Post.fromJson(object);
     }).toList();
 
-
     final List<Post> jsonPosts = [];
     for (int i = 0; i < jsonElaboratedPosts.length; i++) {
       jsonPosts.add(await jsonElaboratedPosts[i]);
     }
 
-    // final startIndex = Random().nextInt(jsonPosts.length - 10);
-    // final posts = jsonPosts.sublist(startIndex, startIndex + 10).shuffle();
-    final posts = List.generate(
-      10,
-          (index) => jsonPosts[Random().nextInt(jsonPosts.length)],
-    );
+    final startIndex = Random().nextInt(jsonPosts.length - 10);
+    final posts = jsonPosts.sublist(startIndex, startIndex + 10)..shuffle();
+    // final posts = List.generate(
+    //   10,
+    //   (index) => jsonPosts[Random().nextInt(jsonPosts.length)],
+    // );
 
     // return Right(
     //   Failure.fromJson({
@@ -143,11 +141,13 @@ class ApiServiceMock extends ApiService {
   }
 
   @override
-  Future<Either<Post, Failure>> createPost(String token,
-      String image,
-      String description,
-      List<String> tags,
-      String? link,) async {
+  Future<Either<Post, Failure>> createPost(
+    String token,
+    String image,
+    String description,
+    List<String> tags,
+    String? link,
+  ) async {
     return Left(
       Post(
         description: 'dummy',
@@ -159,15 +159,17 @@ class ApiServiceMock extends ApiService {
   }
 
   @override
-  Future<Either<String, Failure>> createUser(String username,
-      String password,
-      String mail,
-      String name,
-      String surname,
-      String sex,
-      String language,
-      String birth,
-      bool advertiser,) async {
+  Future<Either<String, Failure>> createUser(
+    String username,
+    String password,
+    String mail,
+    String name,
+    String surname,
+    String sex,
+    String language,
+    String birth,
+    bool advertiser,
+  ) async {
     // return Right(
     //   Failure.fromJson({
     //     "statusCode": 400,

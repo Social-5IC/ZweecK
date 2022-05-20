@@ -88,17 +88,22 @@ class UserView extends StatelessWidget {
             ),
             child: const Text("Settings"),
           ),
-          ElevatedButton(
-            onPressed: () {
-              model.logout(context);
-            },
-            child: const Text("logout"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              model.deleteUser(context);
-            },
-            child: const Text("delete user"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  model.logout(context);
+                },
+                child: const Text("logout"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  model.deleteUser(context);
+                },
+                child: const Text("delete user"),
+              ),
+            ],
           ),
         ],
       ),
